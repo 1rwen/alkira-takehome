@@ -11,6 +11,9 @@ import {
   CardDescription,
 } from "@/components/ui/card"
 import { validateEmail, validatePassword } from "@/lib/validation"
+import { findUser } from "@/lib/mockUsers"
+
+
 
 export function LoginForm() {
   const navigate = useNavigate()
@@ -36,6 +39,16 @@ export function LoginForm() {
     // In a real app you'd verify credentials against a backend here.
     // For this flow, passing validation sends the user to the MFA step.
     navigate("/mfa", { state: { email } })
+
+    const matchedUser = findUser(email, password)
+
+    if (!matchedUser) {
+      setErrors({ password: "Invalid email or password" })
+      return
+    }
+
+    setErrors({})
+    navigate("/mfa", { state: { email, password } })
   }
 
   return (

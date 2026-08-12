@@ -10,6 +10,8 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card"
+import { useAuth } from "@/context/AuthContext"
+import { findUser } from "@/lib/mockUsers"
 
 // Hardcoded so you can actually test the flow without real OTP infra
 const MOCK_OTP = "123456"
@@ -17,7 +19,8 @@ const MOCK_OTP = "123456"
 export function MFAForm() {
   const navigate = useNavigate()
   const location = useLocation()
-  const email = (location.state as { email?: string })?.email
+  const { login } = useAuth()
+  const { email, password } = (location.state as { email?: string; password?: string }) || {}
 
   const [code, setCode] = useState("")
   const [error, setError] = useState("")
@@ -37,6 +40,15 @@ export function MFAForm() {
     setError("")
     // Real login success — redirect wherever your authenticated app lives
     navigate("/dashboard")
+
+    const matchedUser = findUser(email ?? "", password ?? "")
+    if (matchedUser) {
+      login(matchedUser)
+      navigate("/dashboard")
+    } else {
+      setError("Session expired, please log in again")
+      navigate("/")
+    }
   }
 
   return (
