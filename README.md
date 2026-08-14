@@ -48,6 +48,27 @@ Both accounts use the same mock OTP code for MFA (see below).
 7. From `/`, click "Sign up" to confirm it navigates to `/signup` as a separate screen. Submitting valid values there mocks account creation and redirects back to `/`.
 8. Use the "Log out" button on the dashboard to clear the session and confirm you're returned to `/`.
 
+## Running Automated Tests
+
+Unit and component tests are written with **Vitest** and **React Testing Library**.
+
+Run the full suite:
+```bash
+npm test
+```
+
+Run in watch mode while developing:
+```bash
+npm run test:watch
+```
+
+**Coverage:**
+- `src/lib/validation.test.ts` — email and password validation rules
+- `src/lib/mockUsers.test.ts` — mock user lookup (correct/incorrect credentials, case-insensitivity)
+- `src/components/LoginForm.test.tsx` — empty-field validation, invalid email format, invalid credentials
+- `src/components/Dashboard.test.tsx` — role-based rendering (read-only users don't see Edit/Delete controls; read-write users do)
+
+End-to-end coverage of the full login → MFA → dashboard flow was intentionally left to manual testing (see the section above) rather than automated, given the take-home's scope — but the underlying logic each step depends on (validation, user lookup, role gating) is unit/component tested.
 ## Key Design Decisions and Assumptions
 
 - **Mock data over persistence:** Per the assignment ("mock users/roles are acceptable, no backend authentication required"), user records live in a static in-memory array (`MOCK_USERS`) rather than a database. Nothing is written to disk, state resets on page refresh or dev server restart.
