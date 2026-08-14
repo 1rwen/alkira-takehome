@@ -9,6 +9,7 @@ An authentication experience demonstrating login, MFA, form validation, and basi
 - schdcn (Base UI / Nova Preset) - Component Library (Button , Input, Label, Card)
 - React Router (react-router-dom) - client-side routing
 - React Context AP - global auth state
+- Vitest + React Testing Library — unit and component testing
 
 In this project, no backend/database was used as all authentication is purely mocked client-side per the assignment requirements.
 
